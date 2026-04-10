@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --maroon: #800000;
+  --maroon-light: #fcf8f8;
+  --lvl-basic: #EAAA00;
+  --lvl-basic-text: #7a5200;
+  --lvl-intermediate: #007396;
+  --lvl-advanced: #789D4A;
+  --gray-border: #D9D9D9;
+  --gray-mid: #A6A6A6;
+  --gray-dark: #737373;
+  --font-sans: 'Inter', Helvetica, Arial, sans-serif;
+  --font-serif: 'EB Garamond', Georgia, serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: #fff; color: #222; line-height: 1.5; }
+
+.brand-header { background: var(--maroon); padding: 1.1rem 2rem; display: flex; align-items: center; gap: 1rem; color: white; }
+.brand-header svg { width: 24px; height: 24px; fill: white; flex-shrink: 0; }
+.brand-header h1 { font-size: 18px; font-weight: 500; letter-spacing: 0.02em; color: white; }
+
+.view { display: none; }
+.view.active { display: block; }
+
+.main { padding: 2rem; max-width: 960px; margin: 0 auto; }
+
+.page-header { background: var(--maroon); padding: 2rem 2rem 1.75rem; }
+.page-header h2 { font-family: var(--font-serif); font-size: 2rem; color: #fff; margin-bottom: 0.35rem; }
+.page-header p { font-size: 14px; color: rgba(255,255,255,0.75); }
+
+.legend { display: flex; gap: 1.5rem; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-dark); font-weight: 500; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+.domain-card { border: 1.5px solid var(--gray-border); border-radius: 8px; margin-bottom: 1rem; overflow: hidden; transition: box-shadow 0.2s; }
+.domain-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.07); }
+.domain-card.open { border-color: var(--maroon); box-shadow: 0 4px 14px rgba(128,0,0,0.1); }
+
+.domain-header { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.25rem; cursor: pointer; user-select: none; background: #fff; transition: background 0.15s; }
+.domain-card.open .domain-header { background: var(--maroon-light); }
+.domain-num { font-size: 11px; font-weight: 700; color: #fff; background: var(--maroon); border-radius: 4px; padding: 2px 7px; flex-shrink: 0; letter-spacing: 0.04em; }
+.domain-name { font-size: 15px; font-weight: 600; color: #111; flex: 1; }
+.domain-meta { font-size: 12px; color: var(--gray-mid); flex-shrink: 0; }
+.chevron { flex-shrink: 0; transition: transform 0.25s; color: var(--gray-mid); }
+.domain-card.open .chevron { transform: rotate(180deg); }
+.level-dots { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+.level-dot-sm { width: 8px; height: 8px; border-radius: 50%; }
+
+.drawer { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1); background: #fafafa; border-top: 0px solid var(--gray-border); }
+.domain-card.open .drawer { max-height: 400px; border-top-width: 1px; }
+.drawer-inner { padding: 1.25rem; }
+
+.track { display: flex; align-items: stretch; position: relative; }
+.track::before { content: ""; position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--lvl-basic), var(--lvl-intermediate), var(--lvl-advanced)); z-index: 0; transform: translateY(-50%); }
+
+.skill { position: relative; z-index: 1; flex: 1; background: #fff; border: 1.5px solid var(--gray-border); border-top: 3px solid var(--gray-border); border-radius: 6px; padding: 0.9rem; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; display: flex; flex-direction: column; gap: 0.4rem; margin: 0 4px; }
+.skill:first-child { margin-left: 0; }
+.skill:last-child { margin-right: 0; }
+.skill:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); background: #f9f9f9; }
+.skill.basic        { border-top-color: var(--lvl-basic); }
+.skill.intermediate { border-top-color: var(--lvl-intermediate); }
+.skill.advanced     { border-top-color: var(--lvl-advanced); }
+.skill-id { font-size: 10px; color: var(--gray-mid); font-weight: 600; }
+.skill-name { font-size: 12px; font-weight: 600; color: #111; flex: 1; }
+
+.level-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 10px; width: fit-content; letter-spacing: 0.03em; }
+.badge-basic        { background: var(--lvl-basic); color: var(--lvl-basic-text); }
+.badge-intermediate { background: var(--lvl-intermediate); color: #fff; }
+.badge-advanced     { background: var(--lvl-advanced); color: #fff; }
+
+.arrow-sep { display: flex; align-items: center; z-index: 2; flex-shrink: 0; margin: 0 -2px; }
+
+/* DETAIL VIEW */
+.detail-page-header { background: var(--maroon); padding: 2rem 2rem 1.75rem; }
+
+.back-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 13px; font-weight: 700;
+  color: var(--lvl-basic-text);
+  background: var(--lvl-basic);
+  border: none; border-radius: 6px;
+  cursor: pointer; padding: 0.45rem 1rem;
+  margin-bottom: 1.25rem;
+  transition: background 0.15s, opacity 0.15s;
+  letter-spacing: 0.01em;
+}
+.back-btn:hover { background: #d49a00; }
+.back-btn svg { flex-shrink: 0; }
+
+.detail-breadcrumb { font-size: 12px; color: rgba(255,255,255,0.65); margin-bottom: 0.4rem; }
+.detail-title { font-family: var(--font-serif); font-size: 2.2rem; color: #fff; line-height: 1.2; margin-bottom: 1rem; }
+.detail-meta { display: flex; align-items: center; gap: 12px; }
+
+.detail-body { padding: 2rem; max-width: 720px; margin: 0 auto; }
+
+.detail-step-track { display: flex; gap: 8px; align-items: center; margin-bottom: 2.5rem; }
+.detail-pip { height: 5px; border-radius: 3px; flex: 1; opacity: 0.2; cursor: pointer; transition: opacity 0.2s; }
+.detail-pip:hover { opacity: 0.5; }
+.detail-pip.active { opacity: 1; }
+.pip-basic        { background: var(--lvl-basic); }
+.pip-intermediate { background: var(--lvl-intermediate); }
+.pip-advanced     { background: var(--lvl-advanced); }
+
+.desc-block { font-family: var(--font-serif); font-size: 1.25rem; line-height: 1.8; color: #333; margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--gray-border); }
+
+.section { margin-bottom: 2rem; }
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.85rem; }
+.section-number { width: 24px; height: 24px; border-radius: 50%; background: var(--maroon); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-dark); }
+.section-body { font-size: 15px; line-height: 1.75; background: var(--maroon-light); padding: 1.5rem; border-radius: 6px; border-left: 4px solid var(--maroon); color: #222; }
+.section-placeholder { font-size: 14px; line-height: 1.7; background: #f7f7f5; padding: 1.5rem; border-radius: 6px; border: 1.5px dashed var(--gray-border); color: var(--gray-mid); font-style: italic; }
+
+.resource-link { display: block; background: #f7f7f5; padding: 1rem 1.25rem; border-radius: 6px; text-decoration: none; color: var(--maroon); font-weight: 600; font-size: 14px; margin-bottom: 0.75rem; border: 1px solid var(--gray-border); transition: border-color 0.2s, background 0.2s; }
+.resource-link:hover { border-color: var(--maroon); background: var(--maroon-light); }
+.resource-link small { display: block; color: var(--gray-dark); font-weight: 400; font-size: 12px; margin-bottom: 4px; }
+.no-resources { font-size: 14px; color: #888; font-style: italic; }
+
+.skill-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-border); gap: 1rem; }
+.nav-btn { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--maroon); background: none; border: 1.5px solid var(--gray-border); border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; transition: border-color 0.2s, background 0.2s; max-width: 200px; }
+.nav-btn:hover { border-color: var(--maroon); background: var(--maroon-light); }
+.nav-btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+.nav-btn span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+</style>
+</head>
+<body>
+
+<header class="brand-header">
+  <svg viewBox="0 0 20 20"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z"/></svg>
+  <h1>University of Chicago — Instructor AI Competencies</h1>
+</header>
+
+<div id="view-map" class="view active">
+  <div class="page-header">
+    <h2>Instructor AI Competency Map</h2>
+    <p>Click any domain to expand its skill progression, then select a skill to view details.</p>
+  </div>
+  <div class="main">
+    <div style="height:1.5rem;"></div>
+    <div class="legend">
+      <span style="font-size:12px;font-weight:700;color:var(--gray-dark);text-transform:uppercase;letter-spacing:0.08em;">Proficiency levels →</span>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--lvl-basic)"></div>Basic</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--lvl-intermediate)"></div>Intermediate</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--lvl-advanced)"></div>Advanced</div>
+    </div>
+    <div id="map-root"></div>
+  </div>
+</div>
+
+<div id="view-detail" class="view">
+  <div class="detail-page-header" id="detail-header"></div>
+  <div class="detail-body" id="detail-content"></div>
+</div>
+
+<script>
+const data = [
+  {
+    domain: "Student Engagement & Course Design", num: "1",
+    skills: [
+      { id: "1.1", level: "basic", name: "Leverage AI Usage in Content Area", desc: "Describe clearly how you want students to use AI to accomplish or demonstrate a specific learning outcome.", startHere: "", tryItOut: "", resources: [{t: "AI Syllabus Statements", type: "Template", url: "https://canvas.uchicago.edu/courses/72214/files/15196160?module_item_id=3104875"}] },
+      { id: "1.2", level: "intermediate", name: "Explain Pitfalls", desc: "Clearly explain and demonstrate the uses of AI for a given learning outcome, including advantages and potential pitfalls.", startHere: "", tryItOut: "", resources: [{t:"The Case for Memorization - Barb Oakley", type:"Video Interview", url: "https://learningcurve.fm/episodes/the-case-for-memorization-in-the-ai-era/transcript"}] },
+      { id: "1.3", level: "advanced", name: "Cognitive Lift Design", desc: "Use AI to plan class activities that require students to engage with AI tools while maintaining a high cognitive lift.", startHere: "", tryItOut: "", resources: [{t:"Sample Instructor AI Demos", type:"Discussion Board", url: "https://canvas.uchicago.edu/courses/72214/discussion_topics/981443"}] },
+      { id: "1.4", level: "advanced", name: "Comprehensive Refinement", desc: "Use AI to plan and refine all materials: Learning outcomes, lecture scripts, presentations, custom GPTs for studying, and case studies.", startHere: "", tryItOut: "", resources: [] }
+    ]
+  },
+  {
+    domain: "Encourage Student Reflection about AI Tools", num: "2",
+    skills: [
+      { id: "2.1", level: "basic", name: "Model Reflection on AI Tools", desc: "Model for students how to reflect on the impact of AI on learning and skill application with course content.", startHere: "", tryItOut: "", resources: [] },
+      { id: "2.2", level: "intermediate", name: "Reflection Activities", desc: "Plan and execute reflection activities to help students consider how they are using AI tools and the impact on their learning work.", startHere: "", tryItOut: "", resources: [] },
+      { id: "2.3", level: "advanced", name: "Culture of Reflection", desc: "Create a class culture where students initiate discussions about AI use and openly share their learnings about effective tool usage.", startHere: "", tryItOut: "", resources: [] }
+    ]
+  },
+  {
+    domain: "AI for Course Design", num: "3",
+    skills: [
+      { id: "3.1", level: "basic", name: "AI for Brainstorming", desc: "Use AI tools to brainstorm ideas for learning activities or outcomes with a focus on increasing student engagement.", startHere: "", tryItOut: "", resources: [] },
+      { id: "3.2", level: "intermediate", name: "Alignment Checks", desc: "Use AI tools to check the alignment of class materials (syllabus, presentations) with course learning outcomes or daily objectives.", startHere: "", tryItOut: "", resources: [] },
+      { id: "3.3", level: "intermediate", name: "Artifact Refinement", desc: "Refine slide decks, lecture scripts, and assignments using AI to improve clarity and organization.", startHere: "", tryItOut: "", resources: [] },
+      { id: "3.4", level: "advanced", name: "Ethical Mitigation", desc: "Identify and mitigate possible ethical issues with using AI for learning design tasks.", startHere: "", tryItOut: "", resources: [] }
+    ]
+  },
+  {
+    domain: "AI for Student Learning", num: "4",
+    skills: [
+      { id: "4.1", level: "basic", name: "Instructional Clarity", desc: "Give students instructions for how to use AI on assignments with explanations of the 'Why' behind the methodology.", startHere: "", tryItOut: "", resources: [] },
+      { id: "4.2", level: "intermediate", name: "Process Explanation", desc: "Regularly require students to use AI and explain their specific process for learning and applying new content.", startHere: "", tryItOut: "", resources: [] },
+      { id: "4.3", level: "advanced", name: "Workplace Realism", desc: "Demonstrate how AI is used in the workplace/interviews related to course content and plan activities mimicking these practices.", startHere: "", tryItOut: "", resources: [] }
+    ]
+  },
+  {
+    domain: "AI Literacy and Experimentation", num: "5",
+    skills: [
+      { id: "5.1", level: "basic", name: "Foundational AI Literacy", desc: "Read and process information about new developments in AI and use this information in your teaching.", startHere: "", tryItOut: "", resources: [] },
+      { id: "5.2", level: "intermediate", name: "Discipline-Specific AI Knowledge", desc: "Read and process information about new developments in AI specifically within your area of expertise and education.", startHere: "", tryItOut: "", resources: [] },
+      { id: "5.3", level: "intermediate", name: "Active Experimentation", desc: "Experiment with new AI tools for personal productivity and for teaching.", startHere: "", tryItOut: "", resources: [] },
+      { id: "5.4", level: "advanced", name: "Experiment and Share Findings", desc: "Cultivate a regular practice of experimentation and share findings regularly with students and colleagues.", startHere: "", tryItOut: "", resources: [] }
+    ]
+  },
+  {
+    domain: "AI for Teaching Assistants", num: "6",
+    skills: [
+      { id: "6.1", level: "basic", name: "Ethical TA Boundaries", desc: "Explain ethical and non-ethical uses of AI for TA responsibilities (grading, tutoring, sessions).", startHere: "", tryItOut: "", resources: [] },
+      { id: "6.2", level: "intermediate", name: "AI as Tutor", desc: "Teach students to use AI as an effective tutor for course content, including ways to apply and test learning.", startHere: "", tryItOut: "", resources: [] },
+      { id: "6.3", level: "advanced", name: "Active TA Sessions", desc: "Plan TA sessions using AI tools to increase student engagement and allow for more practice opportunities.", startHere: "", tryItOut: "", resources: [] }
+    ]
+  }
+];
+
+const allSkills = [];
+data.forEach(d => d.skills.forEach(s => allSkills.push({ ...s, domainName: d.domain, domainNum: d.num, domainSkills: d.skills })));
+const levelColors = { basic: '#EAAA00', intermediate: '#007396', advanced: '#789D4A' };
+
+function arrowSVG(toLevel) {
+  const c = levelColors[toLevel] || '#A6A6A6';
+  return `<div class="arrow-sep"><svg width="22" height="32" viewBox="0 0 22 32"><line x1="1" y1="16" x2="18" y2="16" stroke="${c}" stroke-width="1.5" opacity="0.5"/><polygon points="14,11 21,16 14,21" fill="${c}" opacity="0.6"/></svg></div>`;
+}
+
+const root = document.getElementById('map-root');
+data.forEach((domain, di) => {
+  const levelSet = [...new Set(domain.skills.map(s => s.level))];
+  const dotsHTML = levelSet.map(l => `<div class="level-dot-sm" style="background:${levelColors[l]}"></div>`).join('');
+  const card = document.createElement('div');
+  card.className = 'domain-card';
+  card.id = `domain-${di}`;
+
+  const trackHTML = domain.skills.map((s, i) => {
+    const arrow = i < domain.skills.length - 1 ? arrowSVG(domain.skills[i+1].level) : '';
+    return `<div class="skill ${s.level}" onclick="showDetail('${s.id}', event)">
+      <div class="skill-id">${s.id}</div>
+      <div class="skill-name">${s.name}</div>
+      <div class="level-badge badge-${s.level}">${s.level}</div>
+    </div>${arrow}`;
+  }).join('');
+
+  card.innerHTML = `
+    <div class="domain-header" onclick="toggleDomain(${di})">
+      <div class="domain-num">${domain.num}</div>
+      <div class="domain-name">${domain.domain}</div>
+      <div class="level-dots">${dotsHTML}</div>
+      <div class="domain-meta">${domain.skills.length} skills</div>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="drawer">
+      <div class="drawer-inner"><div class="track">${trackHTML}</div></div>
+    </div>
+  `;
+  root.appendChild(card);
+});
+
+window.toggleDomain = function(di) {
+  const card = document.getElementById(`domain-${di}`);
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.domain-card').forEach(c => c.classList.remove('open'));
+  if (!isOpen) card.classList.add('open');
+};
+
+function sectionHTML(num, title, content, isPlaceholder) {
+  const bodyClass = isPlaceholder ? 'section-placeholder' : 'section-body';
+  return `
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">${num}</div>
+        <div class="section-title">${title}</div>
+      </div>
+      <div class="${bodyClass}">${isPlaceholder ? 'Content coming soon.' : content}</div>
+    </div>
+  `;
+}
+
+window.showDetail = function(id, e) {
+  if (e) e.stopPropagation();
+  const globalIdx = allSkills.findIndex(s => s.id === id);
+  const entry = allSkills[globalIdx];
+  const domainSkills = entry.domainSkills;
+  const localIdx = domainSkills.findIndex(s => s.id === id);
+
+  const pips = domainSkills.map((s, i) =>
+    `<div class="detail-pip pip-${s.level} ${i === localIdx ? 'active' : ''}" onclick="showDetail('${s.id}')" title="${s.name}"></div>`
+  ).join('');
+
+  const prev = allSkills[globalIdx - 1];
+  const next = allSkills[globalIdx + 1];
+
+  const resourcesHTML = entry.resources && entry.resources.filter(r => r.t).length > 0
+    ? entry.resources.filter(r => r.t).map(r => `
+        <a href="${r.url||'#'}" target="${r.url && r.url !== '#' ? '_blank' : '_self'}" class="resource-link">
+          <small>${r.type}</small>${r.t}
+        </a>`).join('')
+    : '<p class="no-resources">Resources for this skill are being curated by the department.</p>';
+
+  document.getElementById('detail-header').innerHTML = `
+    <button class="back-btn" onclick="showMap()">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="#7a5200" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to competency map
+    </button>
+    <div class="detail-breadcrumb">${entry.domainNum}. ${entry.domainName}</div>
+    <div class="detail-title">${entry.name}</div>
+    <div class="detail-meta">
+      <div class="level-badge badge-${entry.level}">${entry.level}</div>
+      <span style="font-size:13px;color:rgba(255,255,255,0.65);">Skill ${entry.id}</span>
+    </div>
+  `;
+
+  document.getElementById('detail-content').innerHTML = `
+    <div style="margin-bottom:0.5rem;margin-top:0.25rem;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gray-dark);">Progress in this domain</div>
+    <div class="detail-step-track">${pips}</div>
+
+    <div class="desc-block">${entry.desc}</div>
+
+    ${sectionHTML(1, 'Start Here', entry.startHere, !entry.startHere)}
+    ${sectionHTML(2, 'Try It Out', entry.tryItOut, !entry.tryItOut)}
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">3</div>
+        <div class="section-title">Additional Resources</div>
+      </div>
+      ${resourcesHTML}
+    </div>
+
+    <div class="skill-nav">
+      <button class="nav-btn" onclick="showDetail('${prev ? prev.id : ''}')" ${!prev ? 'disabled' : ''}>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>${prev ? prev.name : ''}</span>
+      </button>
+      <span style="font-size:12px;color:var(--gray-mid);white-space:nowrap;">${entry.id} of ${allSkills.length}</span>
+      <button class="nav-btn" onclick="showDetail('${next ? next.id : ''}')" ${!next ? 'disabled' : ''}>
+        <span>${next ? next.name : ''}</span>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  `;
+
+  document.getElementById('view-map').classList.remove('active');
+  document.getElementById('view-detail').classList.add('active');
+  window.scrollTo(0, 0);
+};
+
+window.showMap = function() {
+  document.getElementById('view-detail').classList.remove('active');
+  document.getElementById('view-map').classList.add('active');
+};
+</script>
+</body>
+</html>
