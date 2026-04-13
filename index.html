@@ -21,7 +21,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-sans); background: #fff; color: #222; line-height: 1.5; }
 
-.brand-header { background: var(--maroon); padding: 1.1rem 2rem; display: flex; align-items: center; gap: 1rem; color: white; }
+.brand-header { background: var(--maroon); padding: 1.1rem 2rem; display: flex; align-items: center; gap: 1rem; }
 .brand-header svg { width: 24px; height: 24px; fill: white; flex-shrink: 0; }
 .brand-header h1 { font-size: 18px; font-weight: 500; letter-spacing: 0.02em; color: white; }
 
@@ -41,7 +41,6 @@ body { font-family: var(--font-sans); background: #fff; color: #222; line-height
 .domain-card { border: 1.5px solid var(--gray-border); border-radius: 8px; margin-bottom: 1rem; overflow: hidden; transition: box-shadow 0.2s; }
 .domain-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.07); }
 .domain-card.open { border-color: var(--maroon); box-shadow: 0 4px 14px rgba(128,0,0,0.1); }
-
 .domain-header { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.25rem; cursor: pointer; user-select: none; background: #fff; transition: background 0.15s; }
 .domain-card.open .domain-header { background: var(--maroon-light); }
 .domain-num { font-size: 11px; font-weight: 700; color: #fff; background: var(--maroon); border-radius: 4px; padding: 2px 7px; flex-shrink: 0; letter-spacing: 0.04em; }
@@ -70,29 +69,14 @@ body { font-family: var(--font-sans); background: #fff; color: #222; line-height
 .skill-name { font-size: 12px; font-weight: 600; color: #111; flex: 1; }
 
 .level-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 10px; width: fit-content; letter-spacing: 0.03em; }
-.badge-basic        { background: var(--lvl-basic); color: var(--lvl-basic-text); }
-.badge-intermediate { background: var(--lvl-intermediate); color: #fff; }
-.badge-advanced     { background: var(--lvl-advanced); color: #fff; }
+.badge-basic        { background: #EAAA00; color: #7a5200; }
+.badge-intermediate { background: #007396; color: #fff; }
+.badge-advanced     { background: #789D4A; color: #fff; }
 
 .arrow-sep { display: flex; align-items: center; z-index: 2; flex-shrink: 0; margin: 0 -2px; }
 
 /* DETAIL VIEW */
-.detail-page-header { background: var(--maroon); padding: 2rem 2rem 1.75rem; }
-
-.back-btn {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: 13px; font-weight: 700;
-  color: var(--lvl-basic-text);
-  background: var(--lvl-basic);
-  border: none; border-radius: 6px;
-  cursor: pointer; padding: 0.45rem 1rem;
-  margin-bottom: 1.25rem;
-  transition: background 0.15s, opacity 0.15s;
-  letter-spacing: 0.01em;
-}
-.back-btn:hover { background: #d49a00; }
-.back-btn svg { flex-shrink: 0; }
-
+.detail-page-header { background: #800000; padding: 2rem 2rem 1.75rem; }
 .detail-breadcrumb { font-size: 12px; color: rgba(255,255,255,0.65); margin-bottom: 0.4rem; }
 .detail-title { font-family: var(--font-serif); font-size: 2.2rem; color: #fff; line-height: 1.2; margin-bottom: 1rem; }
 .detail-meta { display: flex; align-items: center; gap: 12px; }
@@ -103,27 +87,27 @@ body { font-family: var(--font-sans); background: #fff; color: #222; line-height
 .detail-pip { height: 5px; border-radius: 3px; flex: 1; opacity: 0.2; cursor: pointer; transition: opacity 0.2s; }
 .detail-pip:hover { opacity: 0.5; }
 .detail-pip.active { opacity: 1; }
-.pip-basic        { background: var(--lvl-basic); }
-.pip-intermediate { background: var(--lvl-intermediate); }
-.pip-advanced     { background: var(--lvl-advanced); }
+.pip-basic        { background: #EAAA00; }
+.pip-intermediate { background: #007396; }
+.pip-advanced     { background: #789D4A; }
 
 .desc-block { font-family: var(--font-serif); font-size: 1.25rem; line-height: 1.8; color: #333; margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--gray-border); }
 
 .section { margin-bottom: 2rem; }
 .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.85rem; }
-.section-number { width: 24px; height: 24px; border-radius: 50%; background: var(--maroon); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.section-number { width: 24px; height: 24px; border-radius: 50%; background: #800000; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-dark); }
-.section-body { font-size: 15px; line-height: 1.75; background: var(--maroon-light); padding: 1.5rem; border-radius: 6px; border-left: 4px solid var(--maroon); color: #222; }
+.section-body { font-size: 15px; line-height: 1.75; background: var(--maroon-light); padding: 1.5rem; border-radius: 6px; border-left: 4px solid #800000; color: #222; }
 .section-placeholder { font-size: 14px; line-height: 1.7; background: #f7f7f5; padding: 1.5rem; border-radius: 6px; border: 1.5px dashed var(--gray-border); color: var(--gray-mid); font-style: italic; }
 
-.resource-link { display: block; background: #f7f7f5; padding: 1rem 1.25rem; border-radius: 6px; text-decoration: none; color: var(--maroon); font-weight: 600; font-size: 14px; margin-bottom: 0.75rem; border: 1px solid var(--gray-border); transition: border-color 0.2s, background 0.2s; }
-.resource-link:hover { border-color: var(--maroon); background: var(--maroon-light); }
+.resource-link { display: block; background: #f7f7f5; padding: 1rem 1.25rem; border-radius: 6px; text-decoration: none; color: #800000; font-weight: 600; font-size: 14px; margin-bottom: 0.75rem; border: 1px solid var(--gray-border); transition: border-color 0.2s, background 0.2s; }
+.resource-link:hover { border-color: #800000; background: var(--maroon-light); }
 .resource-link small { display: block; color: var(--gray-dark); font-weight: 400; font-size: 12px; margin-bottom: 4px; }
 .no-resources { font-size: 14px; color: #888; font-style: italic; }
 
 .skill-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-border); gap: 1rem; }
-.nav-btn { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--maroon); background: none; border: 1.5px solid var(--gray-border); border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; transition: border-color 0.2s, background 0.2s; max-width: 200px; }
-.nav-btn:hover { border-color: var(--maroon); background: var(--maroon-light); }
+.nav-btn { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #800000; background: none; border: 1.5px solid var(--gray-border); border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; transition: border-color 0.2s, background 0.2s; max-width: 200px; }
+.nav-btn:hover { border-color: #800000; background: var(--maroon-light); }
 .nav-btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
 .nav-btn span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 </style>
@@ -144,9 +128,9 @@ body { font-family: var(--font-sans); background: #fff; color: #222; line-height
     <div style="height:1.5rem;"></div>
     <div class="legend">
       <span style="font-size:12px;font-weight:700;color:var(--gray-dark);text-transform:uppercase;letter-spacing:0.08em;">Proficiency levels →</span>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--lvl-basic)"></div>Basic</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--lvl-intermediate)"></div>Intermediate</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--lvl-advanced)"></div>Advanced</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#EAAA00;"></div>Basic</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#007396;"></div>Intermediate</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#789D4A;"></div>Advanced</div>
     </div>
     <div id="map-root"></div>
   </div>
@@ -297,7 +281,7 @@ window.showDetail = function(id, e) {
     : '<p class="no-resources">Resources for this skill are being curated by the department.</p>';
 
   document.getElementById('detail-header').innerHTML = `
-    <button class="back-btn" onclick="showMap()">
+    <button onclick="showMap()" style="display:inline-flex;align-items:center;gap:7px;background:#EAAA00;color:#7a5200;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;border:none;border-radius:6px;padding:7px 14px;cursor:pointer;margin-bottom:1.25rem;">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="#7a5200" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Back to competency map
     </button>
@@ -312,12 +296,9 @@ window.showDetail = function(id, e) {
   document.getElementById('detail-content').innerHTML = `
     <div style="margin-bottom:0.5rem;margin-top:0.25rem;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gray-dark);">Progress in this domain</div>
     <div class="detail-step-track">${pips}</div>
-
     <div class="desc-block">${entry.desc}</div>
-
     ${sectionHTML(1, 'Start Here', entry.startHere, !entry.startHere)}
     ${sectionHTML(2, 'Try It Out', entry.tryItOut, !entry.tryItOut)}
-
     <div class="section">
       <div class="section-header">
         <div class="section-number">3</div>
@@ -325,7 +306,6 @@ window.showDetail = function(id, e) {
       </div>
       ${resourcesHTML}
     </div>
-
     <div class="skill-nav">
       <button class="nav-btn" onclick="showDetail('${prev ? prev.id : ''}')" ${!prev ? 'disabled' : ''}>
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
