@@ -247,6 +247,19 @@ window.toggleDomain = function(di) {
 };
 
 function sectionHTML(num, title, items) {
+  // Check if items is just a string (for general text/descriptions)
+  if (typeof items === 'string') {
+    return `
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">${num}</div>
+          <div class="section-title">${title}</div>
+        </div>
+        <div class="section-body">${items}</div>
+      </div>`;
+  }
+
+  // Otherwise, treat it as an array of resource objects
   const hasContent = items && items.length > 0;
   const bodyHTML = hasContent
     ? items.map(r => `
@@ -254,6 +267,7 @@ function sectionHTML(num, title, items) {
           <small>${r.type}</small>${r.t}
         </a>`).join('')
     : '<p class="no-resources">Content coming soon.</p>';
+
   return `
     <div class="section">
       <div class="section-header">
@@ -261,8 +275,7 @@ function sectionHTML(num, title, items) {
         <div class="section-title">${title}</div>
       </div>
       ${bodyHTML}
-    </div>
-  `;
+    </div>`;
 }
 
 window.showDetail = function(id, e) {
